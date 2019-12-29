@@ -7,6 +7,7 @@
 #include "util/ThreadPool.h"
 #include "util/ArrayList.h"
 #include "util/math.h"
+#include "util/strutil.h"
 
 int main(int argc, char *argv[]){
     util::Clock clock;
@@ -29,6 +30,20 @@ int main(int argc, char *argv[]){
     for(int i = 0; i < 10;i++){
         util::logInfo("random ", util::randf());
     }
+
+    for(auto i : util::split("hello world", " ")){
+        util::logInfo(i);
+    }
+
+    util::logInfo(util::replace("hello world", "w", "W"));
+    util::logInfo(util::replace("hello world", "world", "people"));
+
+
+    for(auto i : util::split(util::split("2+1*3+4", "*"), "+")){
+        util::logInfo(i);
+    }
+
+    util::logInfo(util::join(util::split("1 2 3 4 5 6"), ", "));
 
     util::logInfo("time: ", clock.elapsed());
     return 0;
