@@ -6,6 +6,7 @@
 #include "util/Clock.h"
 #include "util/ThreadPool.h"
 #include "util/ArrayList.h"
+#include "util/math.h"
 
 int main(int argc, char *argv[]){
     util::Clock clock;
@@ -15,13 +16,18 @@ int main(int argc, char *argv[]){
 
     for(int i = 0; i < 24;i++){
         tasks.add(pool.addTask([i](){
-           util::Clock::sleep(0.5);
+           util::Clock::sleep(0.05);
            util::logInfo("running task ", i);
         }));
     }
 
     for(int i : tasks){
         pool.joinTask(i);
+    }
+
+    util::rands();
+    for(int i = 0; i < 10;i++){
+        util::logInfo("random ", util::randf());
     }
 
     util::logInfo("time: ", clock.elapsed());
