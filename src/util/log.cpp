@@ -87,10 +87,10 @@ namespace util{
         }
         stream << timeinfo->tm_mday << ".";
 
-        if (timeinfo->tm_mon < 10) {
+        if (timeinfo->tm_mon + 1 < 10) {
             stream << "0";
         }
-        stream << timeinfo->tm_mon << ".";
+        stream << timeinfo->tm_mon + 1 << ".";
 
         int year = timeinfo->tm_year + 1900;
         stream << year;
