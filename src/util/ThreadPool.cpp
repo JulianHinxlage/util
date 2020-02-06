@@ -197,8 +197,8 @@ namespace util{
                     break;
                 }
             }
-            std::unique_lock<std::mutex> lock(impl->taskFinishedMutex);
-            impl->taskFinished.wait(lock);
+            //std::unique_lock<std::mutex> lock(impl->taskFinishedMutex);
+            //impl->taskFinished.wait(lock);
         }
         for(auto &w : impl->worker){
             while(w->state != Impl::Worker::IDLE && w->state != Impl::Worker::STOPPED){
