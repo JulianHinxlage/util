@@ -12,9 +12,3 @@ include_directories(src)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 add_library(util STATIC ${SOURCES} ${HEADERS})
-
-project(utiltest)
-link_directories(utiltest lib)
-include_directories(src)
-add_executable(utiltest src/main.cpp)
-target_link_libraries(utiltest util)
