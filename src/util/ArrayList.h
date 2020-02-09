@@ -110,7 +110,7 @@ namespace util{
             return *this;
         }
 
-        bool operator==(const ArrayList &list){
+        bool operator==(const ArrayList &list) const {
             if(size() != list.size()){
                 return false;
             }
@@ -122,7 +122,7 @@ namespace util{
             return true;
         }
 
-        bool operator!=(const ArrayList &list){
+        bool operator!=(const ArrayList &list) const {
             return !operator==(list);
         }
 
@@ -130,7 +130,7 @@ namespace util{
             return get(size() - 1);
         }
 
-        const T &peek() const{
+        const T &peek() const {
             return get(size() - 1);
         }
 
@@ -191,11 +191,11 @@ namespace util{
             return t;
         }
 
-        bool contains(const T &value){
+        bool contains(const T &value) const {
             return find(value) != -1;
         }
 
-        int find(const T &value){
+        int find(const T &value) const {
             for(int i = 0; i < size();i++){
                 if(value == get(i)){
                     return i;
@@ -204,7 +204,7 @@ namespace util{
             return -1;
         }
 
-        int indexOf(T &elm){
+        int indexOf(const T &elm) const{
             return (int)(&elm - begin());
         }
 
@@ -216,7 +216,7 @@ namespace util{
             std::sort(vector.begin(), vector.end());
         }
 
-        int binaryFind(const T &value){
+        int binaryFind(const T &value) const {
             int l = 0;
             int r = size() - 1;
             while(r >= l){
