@@ -53,12 +53,13 @@ namespace util{
             void run(){
                 while(state != STOPPED){
                     if(state == DISPATCHING){
+                        impl->taskFinished.notify_one();
                         std::unique_lock<std::mutex> lock(impl->dataMutex);
-                        if(!impl->taskQueue.empty()){
+                        if (!impl->taskQueue.empty()) {
                             currentTask = impl->taskQueue.front();
                             impl->taskQueue.pop_front();
                             state = RUNNING;
-                        }else{
+                        } else {
                             state = IDLE;
                         }
                     } else if(state == IDLE){
@@ -71,7 +72,6 @@ namespace util{
                         state = DISPATCHING;
                         currentTask.id = -1;
                         mutex.unlock();
-                        impl->taskFinished.notify_one();
                     }
                     if(!impl->running.load()){
                         running = false;
@@ -126,7 +126,6 @@ namespace util{
         }
 
         bool isTaskInQueue(int taskId){
-            std::unique_lock<std::mutex> lock(dataMutex);
             for(Task &task : taskQueue){
                 if(task.id == taskId){
                     return true;
@@ -178,10 +177,15 @@ namespace util{
     }
 
     void ThreadPool::joinTask(int taskId) {
+        impl->dataMutex.lock();
         while(impl->isTaskInQueue(taskId)){
-            std::unique_lock<std::mutex> lock(impl->taskFinishedMutex);
-            impl->taskFinished.wait(lock);
+            //std::unique_lock<std::mutex> lock(impl->taskFinishedMutex);
+            impl->dataMutex.unlock();
+            //impl->taskFinished.wait(lock);
+            impl->dataMutex.lock();
         }
+        impl->dataMutex.unlock();
+
         for(auto &w : impl->worker){
             while(w->state == Impl::Worker::RUNNING && w->currentTask.id == taskId){
                 std::unique_lock<std::mutex> lock(w->mutex);
@@ -190,16 +194,15 @@ namespace util{
     }
 
     void ThreadPool::joinAll() {
-        while(true){
-            {
-                std::unique_lock<std::mutex> lock(impl->dataMutex);
-                if(impl->taskQueue.empty()){
-                    break;
-                }
-            }
+        impl->dataMutex.lock();
+        while(!impl->taskQueue.empty()){
             //std::unique_lock<std::mutex> lock(impl->taskFinishedMutex);
+            impl->dataMutex.unlock();
             //impl->taskFinished.wait(lock);
+            impl->dataMutex.lock();
         }
+        impl->dataMutex.unlock();
+
         for(auto &w : impl->worker){
             while(w->state != Impl::Worker::IDLE && w->state != Impl::Worker::STOPPED){
                 std::unique_lock<std::mutex> lock(w->mutex);
