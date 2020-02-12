@@ -10,8 +10,12 @@ namespace util{
     std::string readFile(const std::string &filename) {
         std::ifstream stream(filename);
         if(stream.is_open()){
-            std::string str((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
-            return str;
+            try{
+                return std::string((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
+            }
+            catch (...){
+                return "";
+            }
         }else{
             return "";
         }
