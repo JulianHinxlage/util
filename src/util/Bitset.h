@@ -38,6 +38,24 @@ namespace util{
             return value;
         }
 
+        bool any(){
+            for(int i = 0; i < bytes; i++){
+                if(data[i] != 0){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool all(){
+            for(int i = 0; i < bytes; i++){
+                if(data[i] != 255){
+                    return false;
+                }
+            }
+            return true;
+        }
+
         bool all(const Bitset &bitset) const {
             for(int i = 0; i < bytes; i++){
                 if((data[i] & bitset.data[i]) != bitset.data[i]){
