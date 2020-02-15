@@ -7,6 +7,7 @@
 
 #include "util/ArrayList.h"
 #include <string>
+#include <sstream>
 
 namespace util{
 
@@ -25,6 +26,26 @@ namespace util{
     bool isNum(const std::string &str);
 
     int toNum(const std::string &str);
+
+    namespace impl {
+        template<typename T>
+        void buildString(std::stringstream &stream, T t) {
+            stream << t;
+        }
+
+        template<typename T, typename... TS>
+        void buildString(std::stringstream &stream, T t, TS... ts) {
+            stream << t;
+            buildString(stream, ts...);
+        }
+    }
+
+    template<typename... T>
+    std::string str(T... t){
+        std::stringstream stream;
+        impl::buildString(stream, t...);
+        return stream.str();
+    }
 
 }
 

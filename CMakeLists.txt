@@ -11,4 +11,4 @@ include_directories(src)
 
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
-add_library(util STATIC ${SOURCES} ${HEADERS})
+add_library(util SHARED ${SOURCES} ${HEADERS})

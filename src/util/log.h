@@ -5,7 +5,7 @@
 #ifndef UTIL_LOG_H
 #define UTIL_LOG_H
 
-#include <sstream>
+#include "util/strutil.h"
 
 namespace util{
 
@@ -26,24 +26,9 @@ namespace util{
     void logSetFileLevel(LogLevel level);
     void logSetFile(const std::string &file = "");
 
-    namespace impl {
-        template<typename T>
-        void buildString(std::stringstream &stream, T t) {
-            stream << t;
-        }
-
-        template<typename T, typename... TS>
-        void buildString(std::stringstream &stream, T t, TS... ts) {
-            stream << t;
-            buildString(stream, ts...);
-        }
-    }
-
     template<typename... T>
     void log(LogLevel level, T... t){
-        std::stringstream stream;
-        impl::buildString(stream, t...);
-        log(level, stream.str());
+        log(level, str(t...));
     }
 
     template<typename... T>
