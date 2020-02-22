@@ -21,7 +21,7 @@ namespace util{
         }
     }
 
-    ArrayList<std::string> split(const std::string &str, const std::string &delimiter) {
+    ArrayList<std::string> split(const std::string &str, const std::string &delimiter, bool addEmptyParts) {
         ArrayList<std::string> res;
         if(delimiter.empty()){
             for(char c : str){
@@ -31,7 +31,7 @@ namespace util{
             std::string buffer;
             for(char c : str){
                 if(c == delimiter[0]){
-                    if(!buffer.empty()){
+                    if(!buffer.empty() || addEmptyParts){
                         res.add(buffer);
                         buffer = "";
                     }
@@ -39,7 +39,7 @@ namespace util{
                     buffer += c;
                 }
             }
-            if(!buffer.empty()){
+            if(!buffer.empty() || addEmptyParts){
                 res.add(buffer);
             }
         }else{
@@ -52,7 +52,7 @@ namespace util{
                     if(index >= (int)delimiter.size()){
                         index = 0;
                         buffer = buffer.substr(0, buffer.size() - delimiter.size());
-                        if(!buffer.empty()){
+                        if(!buffer.empty() || addEmptyParts){
                             res.add(buffer);
                         }
                         buffer = "";
@@ -61,7 +61,7 @@ namespace util{
                     index = 0;
                 }
             }
-            if(!buffer.empty()){
+            if(!buffer.empty() || addEmptyParts){
                 res.add(buffer);
             }
         }
