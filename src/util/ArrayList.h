@@ -216,12 +216,15 @@ namespace util{
             std::sort(vector.begin(), vector.end());
         }
 
-        int binaryFind(const T &value) const {
+        int binaryFind(const T &value, int *outputPosition = nullptr) const {
             int l = 0;
             int r = size() - 1;
             while(r >= l){
                 int mid = l + (r - l) / 2;
                 if(get(mid) == value){
+                    if(outputPosition != nullptr){
+                        *outputPosition = mid;
+                    }
                     return mid;
                 }
                 if(get(mid) > value){
@@ -229,6 +232,9 @@ namespace util{
                 }else{
                     l = mid + 1;
                 }
+            }
+            if(outputPosition != nullptr){
+                *outputPosition = l;
             }
             return -1;
         }
